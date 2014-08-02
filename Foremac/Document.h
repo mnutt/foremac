@@ -7,7 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "task.h"
 
 @interface Document : NSDocument
+
+@property (strong, nonatomic) NSArray* tasks;
 
 @end

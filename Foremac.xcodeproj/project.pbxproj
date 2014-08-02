@@ -19,6 +19,7 @@
 		4CEC69D2198D6EFF00486553 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CEC69AE198D6EFF00486553 /* Cocoa.framework */; };
 		4CEC69DA198D6EFF00486553 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4CEC69D8198D6EFF00486553 /* InfoPlist.strings */; };
 		4CEC69DC198D6EFF00486553 /* ForemacTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC69DB198D6EFF00486553 /* ForemacTests.m */; };
+		4CEC69E7198D7BEF00486553 /* Task.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CEC69E6198D7BEF00486553 /* Task.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,8 @@
 		4CEC69D7198D6EFF00486553 /* ForemacTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ForemacTests-Info.plist"; sourceTree = "<group>"; };
 		4CEC69D9198D6EFF00486553 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4CEC69DB198D6EFF00486553 /* ForemacTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ForemacTests.m; sourceTree = "<group>"; };
+		4CEC69E5198D7BEF00486553 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
+		4CEC69E6198D7BEF00486553 /* Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Task.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +122,8 @@
 			children = (
 				4CEC69C0198D6EFF00486553 /* Document.h */,
 				4CEC69C1198D6EFF00486553 /* Document.m */,
+				4CEC69E5198D7BEF00486553 /* Task.h */,
+				4CEC69E6198D7BEF00486553 /* Task.m */,
 				4CEC69C3198D6EFF00486553 /* Document.xib */,
 				4CEC69C6198D6EFF00486553 /* MainMenu.xib */,
 				4CEC69C9198D6EFF00486553 /* Images.xcassets */,
@@ -257,6 +262,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4CEC69C2198D6EFF00486553 /* Document.m in Sources */,
+				4CEC69E7198D7BEF00486553 /* Task.m in Sources */,
 				4CEC69BB198D6EFF00486553 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

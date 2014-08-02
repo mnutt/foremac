@@ -10,6 +10,8 @@
 
 @implementation Document
 
+@synthesize tasks;
+
 - (id)init
 {
     self = [super init];
@@ -46,13 +48,31 @@
     return nil;
 }
 
+- (NSArray *)tasksFromRawFile:(NSString *)raw
+{
+    NSMutableArray *taskList;
+    NSArray *tasklines = [raw componentsSeparatedByString:@"\n"];
+    
+    for (NSString *line in tasklines) {
+        if([line length] > 0) {
+            Task *task = [[Task alloc] init];
+            [task initWithLine:line];
+            NSLog(@"%@", [task name]);
+            [taskList addObject:task];
+        }
+    }
+    
+    return taskList;
+}
+
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to read your document from the given data of the specified type. If outError != NULL, ensure that you create and set an appropriate error when returning NO.
-    // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead.
-    // If you override either of these, you should also override -isEntireFileLoaded to return NO if the contents are lazily loaded.
-    NSException *exception = [NSException exceptionWithName:@"UnimplementedMethod" reason:[NSString stringWithFormat:@"%@ is unimplemented", NSStringFromSelector(_cmd)] userInfo:nil];
-    @throw exception;
+    NSLog(@"%@", data);
+    NSString * rawProcfile = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
+    
+    NSArray *newTasks = [self tasksFromRawFile:rawProcfile];
+    [self setValue:newTasks forKey:@"tasks"];
+    
     return YES;
 }
 
