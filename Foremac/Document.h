@@ -8,9 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "task.h"
+#import "PXSourceList.h"
 
-@interface Document : NSDocument
+@interface Document : NSDocument <PXSourceListDataSource, PXSourceListDelegate>
 
 @property (strong, nonatomic) NSArray* tasks;
+@property (nonatomic, assign) IBOutlet NSString* rawProcfile;
+@property (weak, nonatomic) IBOutlet PXSourceList *sourceList;
+@property (strong, nonatomic) NSMutableArray *sourceListItems;
 
 @end

@@ -1,0 +1,10 @@
+PODS:
+  - PXSourceList (2.0.5)
+
+DEPENDENCIES:
+  - PXSourceList (~> 2.0)
+
+SPEC CHECKSUMS:
+  PXSourceList: 1a718d3e11e08d49524fb417fab565c248bf9f64
+
+COCOAPODS: 0.33.1
