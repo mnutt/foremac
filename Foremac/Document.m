@@ -16,7 +16,6 @@
 {
     self = [super init];
     if (self) {
-        self.sourceListItems = [[NSMutableArray alloc] init];
         // Add your subclass-specific initialization here.
     }
     return self;
@@ -72,38 +71,39 @@
     NSString * rawProcfile = [[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
     [self setValue:rawProcfile forKey:@"rawProcfile"];
     
+    NSURL *workingDirectory = [[self fileURL] URLByDeletingLastPathComponent];
+    
     NSArray *newTasks = [self tasksFromRawFile:rawProcfile];
     [self setValue:newTasks forKey:@"tasks"];
     
+    self.sourceListItems = [[NSMutableArray alloc] init];
     PXSourceListItem *mainItem = [PXSourceListItem itemWithTitle:@"PROCESSES" identifier:@"processes"];
-    PXSourceListItem *fooItem = [PXSourceListItem itemWithTitle:@"FOO" identifier:@"foo"];
-    [mainItem setChildren:[NSArray arrayWithObject:fooItem]];
     [self.sourceListItems addObject:mainItem];
     
     for (Task *task in self.tasks) {
         PXSourceListItem *item = [PXSourceListItem itemWithTitle:[task name] identifier:[task name]];
-        //[item setRepresentedObject:task];
+        [item setRepresentedObject:task];
+        [task setWorkingDirectory:workingDirectory];
+        [task run];
         [mainItem addChildItem:item];
     }
+    NSLog(@"done loading data from %@", [self fileURL]);
     [self.sourceList reloadData];
+    [self.sourceList expandItem:mainItem];
     
     return YES;
 }
-
 
 #pragma mark -
 #pragma mark Source List Data Source Methods
 
 - (NSUInteger)sourceList:(PXSourceList*)sourceList numberOfChildrenOfItem:(id)item
 {
-    NSLog(@"# children");
-    NSLog(@"%li", [self.sourceListItems count]);
 	//Works the same way as the NSOutlineView data source: `nil` means a parent item
 	if(item==nil) {
 		return [self.sourceListItems count];
 	}
 	else {
-        NSLog(@"count: %li", [[item children] count]);
 		return [[item children] count];
 	}
 }
@@ -126,6 +126,14 @@
 	return [item title];
 }
 
+
+- (void)sourceList:(PXSourceList*)aSourceList setObjectValue:(id)object forItem:(id)item
+{
+    NSLog(@"%@", object);
+	[item setTitle:object];
+}
+
+
 - (BOOL)sourceList:(PXSourceList*)aSourceList isItemExpandable:(id)item
 {
 	return [item hasChildren];
@@ -134,13 +142,25 @@
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList itemHasBadge:(id)item
 {
-	return NO;
+	return !![(PXSourceListItem *)item badgeValue];
+}
+
+
+- (NSInteger)sourceList:(PXSourceList*)aSourceList badgeValueForItem:(id)item
+{
+	return [(PXSourceListItem *)item badgeValue].integerValue;
 }
 
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList itemHasIcon:(id)item
 {
-	return NO;
+	return !![item icon];
+}
+
+
+- (NSImage*)sourceList:(PXSourceList*)aSourceList iconForItem:(id)item
+{
+	return [item icon];
 }
 
 - (NSMenu*)sourceList:(PXSourceList*)aSourceList menuForEvent:(NSEvent*)theEvent item:(id)item
@@ -162,17 +182,38 @@
 
 - (BOOL)sourceList:(PXSourceList*)aSourceList isGroupAlwaysExpanded:(id)group
 {
-	if([[group identifier] isEqualToString:@"processes"])
-		return YES;
-	
 	return NO;
 }
 
 
 - (void)sourceListSelectionDidChange:(NSNotification *)notification
 {
-	NSLog(@"clicked");
+	NSIndexSet *selectedIndexes = [self.sourceList selectedRowIndexes];
+	
+	//Set the label text to represent the new selection
+	if([selectedIndexes count]>1)
+		[self.selectedItemLabel setStringValue:@"(multiple)"];
+	else if([selectedIndexes count]==1) {
+		NSString *identifier = [[self.sourceList itemAtRow:[selectedIndexes firstIndex]] identifier];
+        Task* t = [[self.sourceList itemAtRow:[selectedIndexes firstIndex]] representedObject];
+		
+        NSLog(@"%@", [t command]);
+        [[[self.selectedLog textStorage] mutableString] setString:[t output]];
+		[self.selectedItemLabel setStringValue:identifier];
+	}
+	else {
+		[self.selectedItemLabel setStringValue:@"(none)"];
+	}
 }
 
+
+- (void)sourceListDeleteKeyPressedOnRows:(NSNotification *)notification
+{
+	NSIndexSet *rows = [[notification userInfo] objectForKey:@"rows"];
+	
+	NSLog(@"Delete key pressed on rows %@", rows);
+	
+	//Do something here
+}
 
 @end

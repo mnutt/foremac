@@ -16,5 +16,7 @@
 @property (nonatomic, assign) IBOutlet NSString* rawProcfile;
 @property (weak, nonatomic) IBOutlet PXSourceList *sourceList;
 @property (strong, nonatomic) NSMutableArray *sourceListItems;
+@property (weak, nonatomic) IBOutlet NSTextField *selectedItemLabel;
+@property (strong, nonatomic) IBOutlet NSTextView *selectedLog;
 
 @end
